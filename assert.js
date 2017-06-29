@@ -27,9 +27,10 @@ function assertIsNaN(actual, message){
 	else console.log("%cTest passed. "+ actual + " === " + NaN, "color: green;");
 }
 
-function assertThrowError(block, error, message){
+function assertThrowError(block, args, error, message){
 	try{
-		block();
+		if(typeof args != "undefined") block(...args);
+		else block();
 	}catch(e){
 		if(typeof error != "undefined"){
 			if(error.name !== e.name){
@@ -42,10 +43,8 @@ function assertThrowError(block, error, message){
 				return console.log("%cTest passed. "+ error.name + " === " + e.name, "color: green;");
 			}
 		}
-		else{
-			//The type of error to throw was not specified so any error will do
-			return console.log("%cTest passed. "+ e.name + " was thrown.", "color: green;");
-		}
+		//The type of error to throw was not specified so any error will do
+		return console.log("%cTest passed. "+ e.name + " was thrown with message " + JSON.stringify(e.message), "color: green;");
 	}
 	//No error was thrown
 	message = ((typeof message != "undefined")? message+" ":"") + "Assertion failed. "+ ((typeof error != "undefined")?error.name:"Error") +" expected but no error was thrown.";
