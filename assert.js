@@ -19,10 +19,35 @@ function assertDeepEqual(actual, expected, message){
     }else console.log("%cTest passed. "+ JSON.stringify(actual) + " === " + JSON.stringify(expected), "color: green;");
 }
 
-function assertIsNaN(actual){
+function assertIsNaN(actual, message){
 	if(!isNaN(actual)){
 		message = ((typeof message != "undefined")? message+" ":"") + "Assertion failed. Expected " + NaN + " instead got " + JSON.stringify(actual);
         console.error(message);
 	}
 	else console.log("%cTest passed. "+ actual + " === " + NaN, "color: green;");
+}
+
+function assertThrowError(block, error, message){
+	try{
+		block();
+	}catch(e){
+		if(typeof error != "undefined"){
+			if(error.name !== e.name){
+				//Throws error but not the type of error expected
+				message = ((typeof message != "undefined")? message+" ":"") + "Assertion failed. Expected " + error.name + " instead got " + e.name;
+				return console.error(message);
+			}
+			else{
+				//Throws the right type of error
+				return console.log("%cTest passed. "+ error.name + " === " + e.name, "color: green;");
+			}
+		}
+		else{
+			//The type of error to throw was not specified so any error will do
+			return console.log("%cTest passed. "+ e.name + " was thrown.", "color: green;");
+		}
+	}
+	//No error was thrown
+	message = ((typeof message != "undefined")? message+" ":"") + "Assertion failed. "+ ((typeof error != "undefined")?error.name:"Error") +" expected but no error was thrown.";
+	return console.error(message);
 }
