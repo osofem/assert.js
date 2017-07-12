@@ -19,12 +19,15 @@ function assertSimilar(actual, expected, message){
     }else console.log("%cTest passed. "+ JSON.stringify(actual) + " === " + JSON.stringify(expected), "color: green;");
 }
 
-//TODO: work on this
 function assertDeepEqual(actual, expected, message){
-    if(JSON.stringify(actual) !== JSON.stringify(expected)){
-        message = ((typeof message != "undefined")? message+" ":"") + "Assertion failed. Expected " + JSON.stringify(expected) + " instead got " + JSON.stringify(actual);
-        console.error(message);
-    }else console.log("%cTest passed. "+ JSON.stringify(actual) + " === " + JSON.stringify(expected), "color: green;");
+	if(Object.keys(actual).length != Object.keys(expected).length) return console.error(((typeof message != "undefined")? message+" ":"") + "Assertion failed. Expected " + JSON.stringify(expected) + " instead got " + JSON.stringify(actual));
+	
+	for(var k in expected){
+		if(expected[k] != actual[k]){
+			return console.error(((typeof message != "undefined")? message+" ":"") + "Assertion failed. Expected " + JSON.stringify(expected) + " instead got " + JSON.stringify(actual));
+		} 
+	}
+    console.log("%cTest passed. "+ JSON.stringify(actual) + " === " + JSON.stringify(expected), "color: green;");
 }
 
 function assertIsNaN(actual, message){
